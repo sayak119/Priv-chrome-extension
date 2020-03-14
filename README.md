@@ -33,3 +33,7 @@ Priv is divided into **2** parts-
 * Go to `Settings` in Google Chrome. This can be found in the right hand corner where there are 3 vertical dots.
 * Select `Extensions` from left hand pane.
 * Click on `Load unpacked` and select the folder `Priv-extension`.
+
+## How we built it
+For the chrome extension, we found out all the `<a>` tags when the user clicks **Find Link**. Then we searched for terms like `terms, conditions, privacy, legal, policy` etc, and try to find the most apprpriate link. When a user clicks on it, they will get a new page of the Privacy Policy. Where they can summarize the data or visit other links accordingly.
+
