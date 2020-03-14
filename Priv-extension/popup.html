@@ -1,0 +1,389 @@
+<!-- Copyright 2017 The Chromium Authors. All rights reserved.
+Use of this source code is governed by a BSD-style license that can be
+found in the LICENSE file. -->
+<html>
+  <head>
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <script src="js/jquery.min.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+      <link rel="stylesheet" href="css/css-circular-prog-bar.css">
+  
+    <title>Water Popup</title>
+    <style>
+        p.concise-readable.concise-paragraph {
+        font-size: 17px;
+    }
+        .marginbottom20{
+            margin-top: 20px;
+        }
+        .bordersolid{
+            border-style: solid;
+        }
+      body {
+        text-align: center;
+      }
+
+      #hydrateImage {
+        width: 300px;
+        margin: 5px;
+      }
+
+      button {
+        margin: 5px;
+        outline: none;
+      }
+
+      button:hover {
+        outline: #80DEEA dotted thick;
+      }
+    </style>
+    <!--
+      - JavaScript and HTML must be in separate files: see our Content Security
+      - Policy documentation[1] for details and explanation.
+      -
+      - [1]: https://developer.chrome.com/extensions/contentSecurityPolicy
+     -->
+  </head>
+  <body>
+    <div id="main_window">
+      <img src='./summaries.png' id='hydrateImage'>
+      <button id="btn_summarizer" type="button" class="btn btn-success">Summarize</button>
+     
+  
+      <button id="btn_findLink" type="button" class="btn btn-warning">Find Link</button>
+    </div>
+      <div id="loading_gif" style="display:none;height: 400px;width: 400px">
+      <img style="padding-top: 100px" src="images/Spin-1s-124px.gif" />
+      </div>
+      
+      <div id="main_selection_window" style="display: none; width: 400px">
+      <img src='./summaries.png' id='hydrateImage'>
+          <br />
+          <label>
+              Select any of One
+          </label>
+        <button id="btn_metricesScore" type="button" class="btn btn-lg btn-block btn-info">Metrices Scores</button> <br />
+          <button id="btn_showSummary" type="button" class="btn btn-lg btn-block btn-info">Summarizer</button><br />
+          <button id="btn_clusteringsummary" type="button" class="btn btn-lg btn-block btn-info">Clusters</button><br />
+          <button id="btn_clusteringNER" type="button" class="btn btn-lg btn-block btn-info">Named Entities</button><br />
+          <button id="btn_comparison" type="button" class="btn btn-lg btn-block btn-info">Compare</button><br />
+     
+    </div>
+      <div id="Find_Link_div" style="display: none; width: 400px; height: 500px">
+          <h2> Link to Terms & Conditions URL
+              
+          </h2>
+          <p>Subject to Website, it is possible that automatic fetching of Privacy Page link may gets irregular results due to site Architecture</p>
+          <a id="terms_url" target="_blank" href="#">Nothing</a>
+      </div>
+      <div id="metricScores_div" style="display: none;width: 300px">
+          <div id="readability">
+              <label> Readability</label>
+              <div style="padding-left: 80px">
+                  <div id="readability_progress_circle" class="progress-circle" >
+                    <span id="readability_score">25%</span>
+                        <div class="left-half-clipper">
+                          <div class="first50-bar"></div>
+                          <div class="value-bar"></div>
+                       </div>
+                  </div>
+            </div>
+              <label> Smog Index </label>
+              <div style="padding-left: 80px">
+                  
+                <div id="smog_progress_circle" class=" progress-circle">
+                <span id="smog_index" >45%</span>
+                    <div class="left-half-clipper">
+                      <div class="first50-bar"></div>
+                      <div class="value-bar"></div>
+                   </div>
+              </div>
+                 </div>
+              <label> Word Count</label>
+              
+            <div style="padding-left: 80px">        
+            <div id="wordcount_progress_circle" class="progress-circle over50 ">
+            <span id="word_count">1325</span>
+                <div class="left-half-clipper">
+                  <div class="first50-bar"></div>
+                  <div class="value-bar"></div>
+               </div>
+          </div>
+          </div>
+              </div>
+          
+          <button type="button" class="gotomain btn btn-lg btn-block btn-info" style="position: fixed;bottom: 0">Go to Main</button><br />
+          
+              
+      </div>
+
+      <div id="summarizer_div" style="display: none; width: 500px   ">
+          <div style="padding-top: 30px">
+              Scroll to get more summarized or detailed version of text.
+              <label for="" class="pull-left">Short</label>
+               <label for="" class="pull-right">Detail</label>
+              <input id="summary_slider" class="slider_defaults" type="range" min="10" max="1000" value="100">
+        </div>
+          <h2>Summary</h2>
+          <p id="summary_para" class="concise-readable concise-paragraph" style="padding-bottom: 30px">	Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+        </p>
+          <button type="button" class="gotomain btn btn-lg btn-block btn-info" style="position: fixed;bottom: 0">Go to Main</button><br />
+      </div>
+      <div id="clustering_summary" style="display: none ;width: 700px">
+          <div id="clustering_summary_detail_opt" class="btn-group btn-group-toggle" data-toggle="buttons">
+          <label class="btn btn-secondary">
+            <input type="radio" name="options" value="summerized" autocomplete="off" > Summerized
+          </label>
+          <label class="btn btn-secondary active">
+            <input type="radio" name="options" value="detailed" autocomplete="off" checked> Detailed
+          </label>
+         
+        </div>
+          
+         <div style="padding-top: 30px">
+              Scroll to get more summarized or detailed version of text.
+              <label for="" class="pull-left">Short</label>
+               <label for="" class="pull-right">Detail</label>
+              <input id="cluster_slider" class="slider_defaults" type="range" min="10" max="1000" value="100">
+        </div>
+          <div class="matric_summary marginbottom20 bordersolid">
+              <h2>
+                  First Party Collection/Use
+              </h2>
+              <p id="first_part_summary" class="concise-readable concise-paragraph">	Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+            </p>
+        </div>
+          <div class="matric_summary marginbottom20 bordersolid">
+          <h2>
+              Third Party Sharing/Collection
+          </h2>
+          <p id="third_party_summary" class="concise-readable concise-paragraph">	Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+        </p>
+    </div>          
+            <div class="matric_summary marginbottom20 bordersolid">
+                      <h2>
+                          User Choice/Control
+                      </h2>
+                      <p id="user_choice_summary" class="concise-readable concise-paragraph">	Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                    </p>
+                </div>          
+            <div class="matric_summary marginbottom20 bordersolid">
+                      <h2>
+                          Data Security
+                      </h2>
+                      <p id="data_security_summary" class="concise-readable concise-paragraph">	Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                    </p>
+                </div>          
+            <div class="matric_summary marginbottom20 bordersolid">
+                      <h2>
+                          International and Specific Audiences
+                      </h2>
+                      <p id="international_audience_summary" class="concise-readable concise-paragraph">	Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                    </p>
+                </div>          
+            <div class="matric_summary marginbottom20 bordersolid">
+                      <h2>
+                          User Access, Edit and Deletion
+                      </h2>
+                      <p id="user_access_summary" class="concise-readable concise-paragraph">	Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                    </p>
+                </div>          
+            <div class="matric_summary marginbottom20 bordersolid">
+                      <h2>
+                          Policy Change
+                      </h2>
+                      <p id="policy_change_summary" class="concise-readable concise-paragraph">	Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                    </p>
+                </div>          
+            <div class="matric_summary marginbottom20 bordersolid">
+                      <h2>
+                          Data Retention
+                      </h2>
+                      <p id="data_retention_summary" class="concise-readable concise-paragraph">	Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                    </p>
+                </div>          
+            <div class="matric_summary marginbottom20 bordersolid">
+                      <h2>
+                          Do not track
+                      </h2>
+                      <p id="donot_track_summary" class="concise-readable concise-paragraph">	Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                    </p>
+                </div>          
+            <div class="matric_summary marginbottom20 bordersolid" style="padding-bottom: 30px;">
+          <h2>
+              Others
+          </h2>
+          <p id="other_summary" class="concise-readable concise-paragraph">	Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+        </p>
+    </div> 
+          <button type="button" class="gotomain btn btn-lg btn-block btn-info" style="position: fixed;bottom: 0">Go to Main</button><br />
+      </div>
+      <div id="clustering_NER" style="display: none ;width: 700px">
+          <div class="NER_sents marginbottom20 bordersolid">
+              <h2>
+                  Article
+              </h2>
+              <p id="article_NER_summary" class="concise-readable concise-paragraph">	Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+            </p>
+        </div>
+          <div class="NER_sents marginbottom20 bordersolid">
+              <h2>
+                  Court
+              </h2>
+              <p id="court_NER_summary" class="concise-readable concise-paragraph">	Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+            </p>
+        </div>          
+        <div class="NER_sents marginbottom20 bordersolid">
+                  <h2>
+                      Legality
+                  </h2>
+                  <p id="legality_NER_summary" class="concise-readable concise-paragraph">	Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                </p>
+            </div>          
+        <div class="NER_sents marginbottom20 bordersolid" style="margin-bottom: 50px;">
+                  <h2>
+                      Activity
+                  </h2>
+                  <p id="activity_NER_summary" class="concise-readable concise-paragraph">	Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                </p>
+            </div>          
+          <button type="button" class="gotomain btn btn-lg btn-block btn-info" style="position: fixed;bottom: 0">Go to Main</button><br />
+      </div>
+      <div id="compare_selection_div" style="display: none ;width: 400px;padding-top: 30%">
+          <label for="sel1">Select Target Site:</label>
+              <select name="target_site" class="form-control" id="target_site">
+                <option value="google">Google</option>
+                <option value="facebook">Facebook</option>
+                <option value="amazon">Amazon</option>
+                <option value="youtube">Youtube</option>
+              </select>
+          <button id="btn_ContinueCompare" type="button" class="btn btn-lg btn-primary">Continue</button>
+          <button type="button" class="gotomain btn btn-lg btn-block btn-info" style="position: fixed;bottom: 0">Go to Main</button><br />
+      </div>
+      <div id="compare_div"  style="display: none ;width: 700px">
+              <div class="matric_summary marginbottom20 bordersolid">
+                  <h2>
+                      First Party Collection/Use
+                  </h2>
+                  <p id="first_part_summary_self" class="concise-readable concise-paragraph">	Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                </p>
+                  <h3 class="target_site_heading" >
+                      Google
+                  </h3>
+                  <p id="first_part_summary_target" class="concise-readable concise-paragraph">	Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                </p>
+            </div>
+              <div class="matric_summary marginbottom20 bordersolid">
+          <h2>
+              Third Party Sharing/Collection
+          </h2>
+          <p id="third_party_summary_self" class="concise-readable concise-paragraph">	Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+        </p>
+                  <h3 class="target_site_heading">
+                      Google
+                  </h3>
+                  <p id="third_party_summary_target" class="concise-readable concise-paragraph">	Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                </p>
+    </div>          
+            <div class="matric_summary marginbottom20 bordersolid">
+                      <h2>
+                          User Choice/Control
+                      </h2>
+                      <p id="user_choice_summary_self" class="concise-readable concise-paragraph">	Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                    </p>
+                <h3 class="target_site_heading">
+                      Google
+                  </h3>
+                  <p id="user_choice_summary_target" class="concise-readable concise-paragraph">	Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                </p>
+                </div>          
+            <div class="matric_summary marginbottom20 bordersolid">
+                      <h2>
+                          Data Security
+                      </h2>
+                      <p id="data_security_summary_self" class="concise-readable concise-paragraph">	Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                    </p>
+                <h3 class="target_site_heading">
+                      Google
+                  </h3>
+                  <p id="data_security_summary_target" class="concise-readable concise-paragraph">	Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                </p>
+                </div>          
+            <div class="matric_summary marginbottom20 bordersolid">
+                      <h2>
+                          International and Specific Audiences
+                      </h2>
+                      <p id="international_audience_summary_self" class="concise-readable concise-paragraph">	Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                    </p>
+                <h3 class="target_site_heading">
+                      Google
+                  </h3>
+                  <p id="international_audience_summary_target" class="concise-readable concise-paragraph">	Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                </p>
+                </div>          
+            <div class="matric_summary marginbottom20 bordersolid">
+                      <h2>
+                          User Access, Edit and Deletion
+                      </h2>
+                      <p id="user_access_summary_self" class="concise-readable concise-paragraph">	Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                    </p>
+                <h3 class="target_site_heading">
+                      Google
+                  </h3>
+                  <p id="user_access_summary_target" class="concise-readable concise-paragraph">	Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                </p>
+                </div>          
+            <div class="matric_summary marginbottom20 bordersolid">
+                      <h2>
+                          Policy Change
+                      </h2>
+                      <p id="policy_change_summary_self" class="concise-readable concise-paragraph">	Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                    </p>
+                <h3 class="target_site_heading">
+                      Google
+                  </h3>
+                  <p id="policy_change_summary_target" class="concise-readable concise-paragraph">	Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                </p>
+                </div>          
+            <div class="matric_summary marginbottom20 bordersolid">
+                      <h2>
+                          Data Retention
+                      </h2>
+                      <p id="data_retention_summary_self" class="concise-readable concise-paragraph">	Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                    </p>
+                <h3 class="target_site_heading">
+                      Google
+                  </h3>
+                  <p id="data_retention_summary_target" class="concise-readable concise-paragraph">	Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                </p>
+                </div>          
+            <div class="matric_summary marginbottom20 bordersolid">
+                      <h2>
+                          Do not track
+                      </h2>
+                      <p id="donot_track_summary_self" class="concise-readable concise-paragraph">	Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                    </p>
+                <h3 class="target_site_heading">
+                      Google
+                  </h3>
+                  <p id="donot_track_summary_target" class="concise-readable concise-paragraph">	Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                </p>
+                </div>          
+            <div class="matric_summary marginbottom20 bordersolid" style="margin-bottom: 50px;">
+          <h2>
+              Others
+          </h2>
+              <p id="other_summary_self" class="concise-readable concise-paragraph">	Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+            </p>
+                <h3 class="target_site_heading">
+                      Google
+                  </h3>
+                  <p id="other_summary_target" class="concise-readable concise-paragraph">	Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                </p>
+       </div> 
+          <button type="button" class="gotomain btn btn-lg btn-block btn-info" style="position: fixed;bottom: 0">Go to Main</button><br />
+      </div>
+   <!-- link to non-persistent background script -->
+   <script src="popup.js"></script>
+  </body>
+</html>
