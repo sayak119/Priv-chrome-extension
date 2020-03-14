@@ -37,3 +37,5 @@ Priv is divided into **2** parts-
 ## How we built it
 For the chrome extension, we found out all the `<a>` tags when the user clicks **Find Link**. Then we searched for terms like `terms, conditions, privacy, legal, policy` etc, and try to find the most apprpriate link. When a user clicks on it, they will get a new page of the Privacy Policy. Where they can summarize the data or visit other links accordingly.
 
+
+[**Video**](https://www.youtube.com/watch?v=-suRZULyLcM)
