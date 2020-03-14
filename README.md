@@ -1,5 +1,7 @@
 # Priv Chrome-extension
 
+![Logo](Priv-extension/summaries.png)
+
 **Priv** is a Chrome Extension that provides the user the ability to **categorize**, **summarize**, **understand** and **compare** Privacy Policies. It has a simple User Interface that gives the user the power to understand the critical aspect of privacy policies. They can select how much granularity they want in their summary or they can go for detailed one too.
 
 We divided the privacy policy into **10** parts or clusters. They are as follows -
