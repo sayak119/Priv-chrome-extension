@@ -49,7 +49,7 @@ chrome.runtime.onMessage.addListener(
                                 required_url=absolute_path+required_url;
                             }
                             if(!checkforhttp_tag(required_url)){
-                                var absolute_path=location.href;
+                                var absolute_path=trailChecker(location.href);
                                 required_url=absolute_path+required_url;
                             }
                         }
