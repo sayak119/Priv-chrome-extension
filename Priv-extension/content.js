@@ -20,6 +20,11 @@
 function isPathAbsolute(path) {
   return /^(?:\/|[a-z]+:\/\/)/.test(path);
 }
+
+function trailChecker(site)     
+{     
+    return site.replace(/\/$/, "");
+}
 function checkforhttp_tag(path){
      return path.includes("http");
 }
@@ -40,7 +45,7 @@ chrome.runtime.onMessage.addListener(
                             var status_=isPathAbsolute(required_url);
                             if(!status_)
                             {
-                                var absolute_path=location.href;
+                                var absolute_path=trailChecker(location.href);
                                 required_url=absolute_path+required_url;
                             }
                             if(!checkforhttp_tag(required_url)){
