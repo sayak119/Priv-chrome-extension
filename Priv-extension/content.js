@@ -41,7 +41,7 @@ chrome.runtime.onMessage.addListener(
                             if(!status_)
                             {
                                 var absolute_path=location.href;
-                                required_url=absolute_path+"/"+required_url;
+                                required_url=absolute_path+required_url;
                             }
                             if(!checkforhttp_tag(required_url)){
                                 var absolute_path=location.href;
